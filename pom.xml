@@ -11,8 +11,12 @@
 	<groupId>com.payledger</groupId>
 	<artifactId>payledger</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>PayLedger</name>
+
+	<description>
+		Multi-Tenant FinTech Split-Payment and
+		Double-Entry Ledger System
+	</description>
 	<url/>
 	<licenses>
 		<license/>
