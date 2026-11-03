@@ -1,33 +1,234 @@
 # PayLedger
 
-A Multi-Tenant FinTech Split-Payment and
-Double-Entry Ledger System built using Java
-and Spring Boot.
+A Multi-Tenant FinTech Split-Payment and Double-Entry Ledger System built using Java and Spring Boot.
 
-## Project Overview
+## Overview
 
-PayLedger aims to demonstrate how financial
-transactions can be managed reliably using
-double-entry bookkeeping principles.
+PayLedger is a backend engineering project designed to demonstrate how financial transactions can be managed reliably using double-entry bookkeeping principles.
 
-## Tech Stack
+The project aims to explore important backend engineering concepts such as:
 
-- Java 21
-- Spring Boot
-- Maven
-- Spring Data JPA
-- PostgreSQL
-- Flyway
-- Redis
-- Docker
+* Double-entry accounting and ledger management
+* Multi-tenant architecture
+* Secure transaction processing
+* Database consistency and reliability
+* Caching and infrastructure management
+
+Currently, the project is under active development.
+
+## Technology Stack
+
+| Technology        | Purpose                         |
+| ----------------- | ------------------------------- |
+| Java 21           | Backend programming language    |
+| Spring Boot 4.1.2 | Backend framework               |
+| Maven             | Build and dependency management |
+| Spring Data JPA   | Database persistence            |
+| Spring Data Redis | Redis integration               |
+| PostgreSQL 17     | Relational database             |
+| Flyway            | Database schema migrations      |
+| Redis 8           | Caching and fast data access    |
+| Docker Compose    | Infrastructure management       |
+
+## Current Architecture
+
+```text
+             PayLedger
+                 |
+          Spring Boot App
+             Port 8080
+                 |
+       +---------+---------+
+       |                   |
+   PostgreSQL             Redis
+   Port 5433             Port 6379
+       |                   |
+   Persistent            Persistent
+    Volume                Volume
+```
+
+The Spring Boot application connects to PostgreSQL for relational data persistence and Redis for caching-related operations.
+
+Docker Compose manages the PostgreSQL and Redis containers.
+
+## Prerequisites
+
+Install the following before running the project:
+
+* Java 21
+* Docker Desktop
+* Git
+
+Maven is included through the Maven Wrapper.
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Abhishek-dot-eng/PayLedger.git
+```
+
+```bash
+cd PayLedger
+```
+
+### 2. Configure environment variables
+
+Create your local environment file from the example:
+
+**Windows PowerShell:**
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Open `.env` and replace the placeholder password with your local PostgreSQL password.
+
+Never commit your actual `.env` file to Git.
+
+### 3. Start infrastructure services
+
+Run:
+
+```bash
+docker compose up -d
+```
+
+This starts:
+
+* PostgreSQL on port `5433`
+* Redis on port `6379`
+
+Check container status:
+
+```bash
+docker compose ps
+```
+
+### 4. Verify PostgreSQL
+
+```bash
+docker compose exec postgres psql -U payledger_user -d payledger_db -c "SELECT current_database();"
+```
+
+### 5. Verify Redis
+
+```bash
+docker compose exec redis redis-cli PING
+```
+
+Expected response:
+
+```text
+PONG
+```
+
+### 6. Run application tests
+
+**Windows PowerShell:**
+
+```powershell
+.\mvnw.cmd clean test
+```
+
+### 7. Start PayLedger
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+The application starts on:
+
+```text
+http://localhost:8080
+```
+
+## Environment Configuration
+
+The application uses environment-based configuration to avoid hardcoding sensitive credentials.
+
+| Variable    | Description         | Default                     |
+| ----------- | ------------------- | --------------------------- |
+| DB_PASSWORD | PostgreSQL password | Required                    |
+| DB_URL      | PostgreSQL JDBC URL | localhost:5433/payledger_db |
+| DB_USERNAME | PostgreSQL username | payledger_user              |
+| REDIS_HOST  | Redis hostname      | localhost                   |
+| REDIS_PORT  | Redis port          | 6379                        |
+
+The `.env` file is excluded from Git. The `.env.example` file provides a safe configuration template.
+
+## Database Management
+
+Flyway is configured to manage database schema migrations.
+
+Migration files will be maintained in:
+
+```text
+src/main/resources/db/migration/
+```
+
+Hibernate schema generation is configured with:
+
+```properties
+spring.jpa.hibernate.ddl-auto=validate
+```
+
+This ensures Hibernate validates the database schema rather than automatically creating or modifying it.
+
+## Project Structure
+
+```text
+payledger/
+│
+├── src/
+│   ├── main/
+│   │   ├── java/com/payledger/
+│   │   │   ├── infrastructure/
+│   │   │   │   └── redis/
+│   │   │   │       └── RedisService.java
+│   │   │   └── PayledgerApplication.java
+│   │   │
+│   │   └── resources/
+│   │       └── application.properties
+│   │
+│   └── test/
+│       └── java/com/payledger/
+│           ├── DatabaseConnectivityTest.java
+│           └── infrastructure/redis/
+│               └── RedisServiceTest.java
+│
+├── .env.example
+├── .gitignore
+├── compose.yml
+├── pom.xml
+└── README.md
+```
 
 ## Development Progress
 
-| Day | Task | Status |
-|-----|------|--------|
-| Day 1 | Maven Project Initialization | Completed |
-| Day 2 | Docker, PostgreSQL & Redis | Pending |
+| Day   | Task                             | Status    |
+| ----- | -------------------------------- | --------- |
+| Day 1 | Maven Project Initialization     | Completed |
+| Day 2 | Docker, PostgreSQL & Redis Setup | Completed |
+| Day 3 | Upcoming Development             | Pending   |
 
-## Project Status
+## Current Project Status
 
-Currently under active development.
+**Infrastructure setup completed.**
+
+* PostgreSQL container configured and tested.
+* Redis container configured and tested.
+* Spring Boot database connectivity verified.
+* Redis service implemented and tested.
+* Environment-based configuration established.
+* Docker Compose infrastructure configured.
+* All 4 Maven tests passing.
+
+More features will be added as development progresses.
+
+## Author
+
+**Abhishek Pal**
+
+GitHub: [Abhishek-dot-eng](https://github.com/Abhishek-dot-eng)
