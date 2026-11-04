@@ -180,24 +180,31 @@ This ensures Hibernate validates the database schema rather than automatically c
 
 ```text
 payledger/
-│
 ├── src/
 │   ├── main/
 │   │   ├── java/com/payledger/
+│   │   │   ├── domain/
+│   │   │   │   └── tenant/
+│   │   │   │       ├── Tenant.java
+│   │   │   │       └── TenantRepository.java
 │   │   │   ├── infrastructure/
 │   │   │   │   └── redis/
-│   │   │   │       └── RedisService.java
 │   │   │   └── PayledgerApplication.java
-│   │   │
 │   │   └── resources/
+│   │       ├── db/
+│   │       │   └── migration/
+│   │       │       └── V1__create_tenants_table.sql
 │   │       └── application.properties
-│   │
 │   └── test/
 │       └── java/com/payledger/
 │           ├── DatabaseConnectivityTest.java
-│           └── infrastructure/redis/
-│               └── RedisServiceTest.java
-│
+│           ├── domain/
+│           │   └── tenant/
+│           │       ├── TenantPersistenceTest.java
+│           │       └── TenantRepositoryTest.java
+│           └── infrastructure/
+│               └── redis/
+│                   └── RedisServiceTest.java
 ├── .env.example
 ├── .gitignore
 ├── compose.yml
@@ -207,25 +214,39 @@ payledger/
 
 ## Development Progress
 
-| Day   | Task                             | Status    |
-| ----- | -------------------------------- | --------- |
-| Day 1 | Maven Project Initialization     | Completed |
-| Day 2 | Docker, PostgreSQL & Redis Setup | Completed |
-| Day 3 | Upcoming Development             | Pending   |
+| Day   | Task                                         | Status    |
+| ----- | -------------------------------------------- | --------- |
+| Day 1 | Maven Project Initialization                 | Completed |
+| Day 2 | Docker, PostgreSQL & Redis Setup             | Completed |
+| Day 3 | Tenant Entity, Flyway Migration & Repository | Completed |
 
 ## Current Project Status
 
-**Infrastructure setup completed.**
+**Infrastructure setup and initial tenant persistence layer completed.**
 
-* PostgreSQL container configured and tested.
-* Redis container configured and tested.
-* Spring Boot database connectivity verified.
-* Redis service implemented and tested.
-* Environment-based configuration established.
-* Docker Compose infrastructure configured.
-* All 4 Maven tests passing.
+Implemented features:
 
-More features will be added as development progresses.
+* PostgreSQL and Redis configured using Docker Compose.
+* Environment-based application configuration.
+* Database connectivity verified.
+* Redis integration implemented and tested.
+* Flyway database migration configured.
+* Tenant entity created with UUID-based identification.
+* Tenant status and audit timestamps configured.
+* Tenant repository implemented using Spring Data JPA.
+* Repository methods for tenant lookup and existence checks.
+* Database-level unique constraint for tenant codes.
+* JPA integration tests for tenant persistence and repository operations.
+
+**Testing results:**
+
+* Total tests: 10
+* Passed: 10
+* Failed: 0
+* Errors: 0
+
+The project is under active development. Upcoming work will expand the domain model and implement the core financial ledger functionality.
+
 
 ## Author
 
