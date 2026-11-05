@@ -189,22 +189,33 @@ payledger/
 │   │   │   │       └── TenantRepository.java
 │   │   │   ├── infrastructure/
 │   │   │   │   └── redis/
+│   │   │   ├── tenant/
+│   │   │   │   ├── dto/
+│   │   │   │   │   ├── TenantRequest.java
+│   │   │   │   │   └── TenantResponse.java
+│   │   │   │   ├── exception/
+│   │   │   │   │   ├── TenantAlreadyExistsException.java
+│   │   │   │   │   └── TenantNotFoundException.java
+│   │   │   │   └── TenantService.java
 │   │   │   └── PayledgerApplication.java
 │   │   └── resources/
-│   │       ├── db/
-│   │       │   └── migration/
-│   │       │       └── V1__create_tenants_table.sql
+│   │       ├── db/migration/
+│   │       │   └── V1__create_tenants_table.sql
 │   │       └── application.properties
 │   └── test/
 │       └── java/com/payledger/
 │           ├── DatabaseConnectivityTest.java
-│           ├── domain/
-│           │   └── tenant/
-│           │       ├── TenantPersistenceTest.java
-│           │       └── TenantRepositoryTest.java
-│           └── infrastructure/
-│               └── redis/
-│                   └── RedisServiceTest.java
+│           ├── domain/tenant/
+│           │   ├── TenantPersistenceTest.java
+│           │   └── TenantRepositoryTest.java
+│           ├── infrastructure/redis/
+│           │   └── RedisServiceTest.java
+│           └── tenant/
+│               ├── dto/
+│               │   ├── TenantRequestValidationTest.java
+│               │   └── TenantResponseTest.java
+│               ├── TenantServiceTest.java
+│               └── TenantServiceIntegrationTest.java
 ├── .env.example
 ├── .gitignore
 ├── compose.yml
@@ -214,36 +225,58 @@ payledger/
 
 ## Development Progress
 
-| Day   | Task                                         | Status    |
-| ----- | -------------------------------------------- | --------- |
-| Day 1 | Maven Project Initialization                 | Completed |
-| Day 2 | Docker, PostgreSQL & Redis Setup             | Completed |
+| Day | Task | Status |
+|---|---|---|
+| Day 1 | Maven Project Initialization | Completed |
+| Day 2 | Docker, PostgreSQL & Redis Setup | Completed |
 | Day 3 | Tenant Entity, Flyway Migration & Repository | Completed |
+| Day 4 | Tenant Service Layer & Business Logic | Completed |
 
 ## Current Project Status
 
-**Infrastructure setup and initial tenant persistence layer completed.**
+**Infrastructure, tenant persistence, and tenant business logic layers completed.**
 
-Implemented features:
+### Implemented Features
 
-* PostgreSQL and Redis configured using Docker Compose.
-* Environment-based application configuration.
-* Database connectivity verified.
-* Redis integration implemented and tested.
-* Flyway database migration configured.
-* Tenant entity created with UUID-based identification.
-* Tenant status and audit timestamps configured.
-* Tenant repository implemented using Spring Data JPA.
-* Repository methods for tenant lookup and existence checks.
-* Database-level unique constraint for tenant codes.
-* JPA integration tests for tenant persistence and repository operations.
+- PostgreSQL and Redis configured using Docker Compose.
+- Environment-based application configuration.
+- Database connectivity verified.
+- Redis integration implemented and tested.
+- Flyway database migration configured.
+- Tenant entity created with UUID-based identification.
+- Tenant status and audit timestamps configured.
+- Tenant repository implemented using Spring Data JPA.
+- Repository methods for tenant lookup and existence checks.
+- Database-level unique constraint for tenant codes.
+- Tenant request and response DTOs implemented.
+- Jakarta Bean Validation for tenant request fields.
+- Custom exceptions for duplicate and missing tenants.
+- Tenant service layer implemented with business logic.
+- Constructor-based dependency injection.
+- Transaction management using Spring's `@Transactional`.
+- Read-only transaction configuration for tenant retrieval.
+- Mockito-based unit tests for tenant service logic.
+- PostgreSQL-backed integration tests for tenant service operations.
 
-**Testing results:**
+### Testing Results
 
-* Total tests: 10
-* Passed: 10
-* Failed: 0
-* Errors: 0
+Full regression test suite:
+
+| Metric | Result |
+|---|---:|
+| Total Tests | 22 |
+| Passed | 22 |
+| Failed | 0 |
+| Errors | 0 |
+| Skipped | 0 |
+
+**Build Status: SUCCESS**
+
+Run the complete test suite using:
+
+```powershell
+.\mvnw.cmd "-Duser.timezone=UTC" clean test
+```
 
 The project is under active development. Upcoming work will expand the domain model and implement the core financial ledger functionality.
 
